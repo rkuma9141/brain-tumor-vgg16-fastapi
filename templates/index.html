@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BrainTumorAI | MRI Analysis</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- Background decoration -->
+
+    <div class="medical-bg">
+
+        <div class="brain-glow glow-one"></div>
+        <div class="brain-glow glow-two"></div>
+
+        <div class="scan-lines"></div>
+
+    </div>
+
+
+    <!-- Navigation -->
+
+    <header class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🧠
+            </div>
+
+            <div>
+
+                <h2>BrainTumorAI</h2>
+
+                <span>
+                    AI Healthcare System
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            Model Online
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+
+        <!-- Hero -->
+
+        <section class="hero">
+
+            <div class="hero-text">
+
+                <span class="eyebrow">
+                    AI-POWERED MEDICAL IMAGING
+                </span>
+
+                <h1>
+                    Brain MRI
+                    <span>Analysis</span>
+                </h1>
+
+                <p>
+                    Upload a brain MRI scan and let our
+                    VGG16 deep learning model classify
+                    the image into one of four categories.
+                </p>
+
+
+                <div class="hero-tags">
+
+                    <span>VGG16</span>
+                    <span>Deep Learning</span>
+                    <span>4 Classes</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="brain-visual">
+
+                <div class="brain-ring ring-one"></div>
+                <div class="brain-ring ring-two"></div>
+
+                <div class="brain-symbol">
+                    🧠
+                </div>
+
+                <div class="scan-dot dot-one"></div>
+                <div class="scan-dot dot-two"></div>
+                <div class="scan-dot dot-three"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Metrics -->
+
+        <section class="metrics-grid">
+
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    🎯
+                </div>
+
+                <div>
+
+                    <strong>88.06%</strong>
+
+                    <span>
+                        Test Accuracy
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    🧠
+                </div>
+
+                <div>
+
+                    <strong>VGG16</strong>
+
+                    <span>
+                        Deep Learning Model
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    🧪
+                </div>
+
+                <div>
+
+                    <strong>4</strong>
+
+                    <span>
+                        Tumor Classes
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    🖼️
+                </div>
+
+                <div>
+
+                    <strong>1,600</strong>
+
+                    <span>
+                        Test Images
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Main dashboard -->
+
+        <section class="dashboard">
+
+
+            <!-- Upload -->
+
+            <div class="card upload-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            STEP 01
+                        </span>
+
+                        <h2>
+                            Upload MRI Scan
+                        </h2>
+
+                    </div>
+
+                    <span class="card-number">
+                        01
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="upload-area"
+                    id="uploadArea"
+                >
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        accept="image/*"
+                        hidden
+                    >
+
+
+                    <div
+                        class="upload-icon"
+                        id="uploadIcon"
+                    >
+                        🧠
+                    </div>
+
+
+                    <h3>
+                        Drop MRI image here
+                    </h3>
+
+                    <p>
+                        or click to browse from your computer
+                    </p>
+
+                    <span class="file-types">
+                        JPG • JPEG • PNG
+                    </span>
+
+
+                    <button
+                        class="browse-btn"
+                        id="browseBtn"
+                        type="button"
+                    >
+                        Select MRI Image
+                    </button>
+
+                </div>
+
+
+                <!-- Preview -->
+
+                <div
+                    class="preview-container"
+                    id="previewContainer"
+                    style="display: none;"
+                >
+
+                    <img
+                        id="imagePreview"
+                        src=""
+                        alt="MRI Preview"
+                    >
+
+                    <div class="preview-info">
+
+                        <strong id="fileName">
+                            MRI Image
+                        </strong>
+
+                        <span id="fileSize">
+                            Ready for analysis
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="change-btn"
+                        id="changeBtn"
+                    >
+                        Change
+                    </button>
+
+                </div>
+
+
+                <button
+                    class="analyze-btn"
+                    id="analyzeBtn"
+                    disabled
+                >
+
+                    <span id="analyzeText">
+                        Analyze MRI
+                    </span>
+
+                    <span
+                        id="loader"
+                        class="loader"
+                        style="display:none;"
+                    ></span>
+
+                </button>
+
+            </div>
+
+
+            <!-- Prediction -->
+
+            <div class="card result-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            STEP 02
+                        </span>
+
+                        <h2>
+                            AI Prediction
+                        </h2>
+
+                    </div>
+
+                    <span class="card-number">
+                        02
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="result-placeholder"
+                    id="resultPlaceholder"
+                >
+
+                    <div class="result-brain">
+                        🧠
+                    </div>
+
+                    <h3>
+                        Awaiting MRI Analysis
+                    </h3>
+
+                    <p>
+                        Upload an MRI scan to receive
+                        an AI-powered prediction.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="result-content"
+                    id="resultContent"
+                    style="display:none;"
+                >
+
+                    <div
+                        class="result-status"
+                        id="resultStatus"
+                    >
+
+                        <div
+                            class="result-check"
+                            id="resultIcon"
+                        >
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <span>
+                                AI Prediction
+                            </span>
+
+                            <h3 id="prediction">
+                                No Tumor
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="confidence-box">
+
+                        <div class="confidence-top">
+
+                            <span>
+                                Confidence
+                            </span>
+
+                            <strong id="confidence">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                id="confidenceBar"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="prediction-details">
+
+                        <div>
+
+                            <span>Model</span>
+                            <strong>VGG16</strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Input Size</span>
+                            <strong>224 × 224</strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Framework</span>
+                            <strong>TensorFlow</strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="warning"
+                        id="warning"
+                    >
+
+                        ⚠️
+                        This AI result is for research
+                        and educational purposes only and
+                        is not a medical diagnosis.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Performance -->
+
+        <section class="performance">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    MODEL PERFORMANCE
+                </span>
+
+                <h2>
+                    Classification Performance
+                </h2>
+
+                <p>
+                    Evaluation results on the 1,600-image
+                    balanced test dataset.
+                </p>
+
+            </div>
+
+
+            <div class="performance-grid">
+
+
+                <div class="performance-score">
+
+                    <div class="score-circle">
+
+                        <strong>
+                            88.06%
+                        </strong>
+
+                        <span>
+                            Accuracy
+                        </span>
+
+                    </div>
+
+                    <div class="score-text">
+
+                        <div>
+
+                            <span>
+                                Macro Precision
+                            </span>
+
+                            <strong>
+                                89%
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Macro Recall
+                            </span>
+
+                            <strong>
+                                88%
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Macro F1
+                            </span>
+
+                            <strong>
+                                88%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Class</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1 Score</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>Glioma</td>
+                                <td>99%</td>
+                                <td>63%</td>
+                                <td>77%</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Meningioma</td>
+                                <td>77%</td>
+                                <td>90%</td>
+                                <td>83%</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>No Tumor</td>
+                                <td>90%</td>
+                                <td>100%</td>
+                                <td>95%</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Pituitary</td>
+                                <td>92%</td>
+                                <td>99%</td>
+                                <td>96%</td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Model information -->
+
+        <section class="info-grid">
+
+
+            <div class="info-card">
+
+                <span class="info-icon">
+                    🧠
+                </span>
+
+                <div>
+
+                    <span>Architecture</span>
+
+                    <strong>
+                        VGG16
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span class="info-icon">
+                    📐
+                </span>
+
+                <div>
+
+                    <span>Image Size</span>
+
+                    <strong>
+                        224 × 224
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span class="info-icon">
+                    🔬
+                </span>
+
+                <div>
+
+                    <span>Task</span>
+
+                    <strong>
+                        4-Class Classification
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span class="info-icon">
+                    ⚙️
+                </span>
+
+                <div>
+
+                    <span>Framework</span>
+
+                    <strong>
+                        TensorFlow / Keras
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Disclaimer -->
+
+        <section class="disclaimer">
+
+            <strong>
+                ⚕️ Medical Disclaimer
+            </strong>
+
+            <p>
+                BrainTumorAI is an educational and research
+                project. Predictions generated by this system
+                should not be used as a substitute for
+                professional medical diagnosis or treatment.
+            </p>
+
+        </section>
+
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            BrainTumorAI • VGG16 Deep Learning System
+        </p>
+
+        <span>
+            Built with FastAPI + TensorFlow
+        </span>
+
+    </footer>
+
+
+    <script src="/static/script.js"></script>
+
+</body>
+
+</html>
