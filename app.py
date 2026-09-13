@@ -1,13 +1,18 @@
+
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from tensorflow.keras.models import load_model
-
+import os
+import io
 import numpy as np
 from PIL import Image
-import io
+from tensorflow.keras.models import load_model
 
+
+# =========================================================
+# APP
+# =========================================================
 
 app = FastAPI(
     title="BrainTumorAI",
@@ -15,19 +20,51 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Static files
-app.mount(
-    "/static",
-    StaticFiles(directory="static"),
-    name="static"
-)
 
-# Load trained model
-model_vgg = load_model(
+# =========================================================
+# BASE DIRECTORY
+# =========================================================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
     "brain_tumor_vgg16_final.keras"
 )
 
-# Class names
+STATIC_DIR = os.path.join(
+    BASE_DIR,
+    "static"
+)
+
+TEMPLATE_DIR = os.path.join(
+    BASE_DIR,
+    "templates"
+)
+
+
+# =========================================================
+# LOAD MODEL
+# =========================================================
+
+model_vgg = load_model(MODEL_PATH)
+
+
+# =========================================================
+# STATIC FILES
+# =========================================================
+
+app.mount(
+    "/static",
+    StaticFiles(directory=STATIC_DIR),
+    name="static"
+)
+
+
+# =========================================================
+# CLASS NAMES
+# =========================================================
+
 class_names = [
     "glioma",
     "meningioma",
@@ -35,7 +72,19 @@ class_names = [
     "pituitary"
 ]
 
-# Actual model performance
+
+display_names = {
+    "glioma": "Glioma",
+    "meningioma": "Meningioma",
+    "notumor": "No Tumor",
+    "pituitary": "Pituitary"
+}
+
+
+# =========================================================
+# MODEL INFORMATION
+# =========================================================
+
 model_accuracy = "88.06%"
 
 model_metrics = {
@@ -62,16 +111,29 @@ model_metrics = {
 }
 
 
+# =========================================================
+# HOME PAGE
+# =========================================================
+
 @app.get("/", response_class=HTMLResponse)
 def home():
 
+    index_path = os.path.join(
+        TEMPLATE_DIR,
+        "index.html"
+    )
+
     with open(
-        "templates/index.html",
+        index_path,
         "r",
         encoding="utf-8"
     ) as file:
         return file.read()
 
+
+# =========================================================
+# HEALTH CHECK
+# =========================================================
 
 @app.get("/health")
 def health():
@@ -81,6 +143,10 @@ def health():
         "model": "VGG16"
     }
 
+
+# =========================================================
+# MODEL METRICS
+# =========================================================
 
 @app.get("/metrics")
 def metrics():
@@ -95,14 +161,19 @@ def metrics():
     }
 
 
+# =========================================================
+# PREDICTION
+# =========================================================
+
 @app.post("/predict")
 async def predict(
     file: UploadFile = File(...)
 ):
 
+    # Read uploaded image
     image_data = await file.read()
 
-    # Open uploaded image
+    # Open image
     img = Image.open(
         io.BytesIO(image_data)
     ).convert("RGB")
@@ -115,7 +186,7 @@ async def predict(
     # Convert to NumPy
     img_array = np.array(img)
 
-    # Same preprocessing used during training
+    # Normalize
     img_array = img_array / 255.0
 
     # Add batch dimension
@@ -130,6 +201,7 @@ async def predict(
         verbose=0
     )[0]
 
+    # Get predicted class
     predicted_index = int(
         np.argmax(predictions)
     )
@@ -138,18 +210,12 @@ async def predict(
         predicted_index
     ]
 
+    # Confidence
     confidence = float(
         predictions[predicted_index]
     )
 
-    # User-friendly class name
-    display_names = {
-        "glioma": "Glioma",
-        "meningioma": "Meningioma",
-        "notumor": "No Tumor",
-        "pituitary": "Pituitary"
-    }
-
+    # Response
     return {
         "predicted_class": predicted_class,
         "display_class": display_names[predicted_class],
@@ -160,3 +226,4 @@ async def predict(
         "accuracy": model_accuracy,
         "model": "VGG16"
     }
+
