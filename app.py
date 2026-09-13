@@ -166,9 +166,7 @@ def metrics():
 # =========================================================
 
 @app.post("/predict")
-async def predict(
-    file: UploadFile = File(...)
-):
+async def predict(file: UploadFile = File(...)):
 
     # Read uploaded image
     image_data = await file.read()
